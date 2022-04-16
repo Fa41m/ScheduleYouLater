@@ -9,6 +9,27 @@
 </head>
 
 <body>
+    <button type="button" id="create" class="btn btn-success">Create Table</button>
+
+    <script type="text/javascript">   
+        var db=openDatabase("itemDB","1.0","itemDB",65535);
+        $(function(){
+        $("#create").click(function(){
+        db.transaction(function(transaction){
+            console.log("hello");
+            var sql="CREATE TABLE items "+
+            "(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"+
+            "item VARCHAR(100) NOT NULL,"+
+            "quantity INT(5) NOT NULL)";
+            transaction.executeSql(sql,undefined,function(){
+                alert("Table is created successfully");
+            },function(){
+                alert("Table is already being created");
+            })
+        });
+        });
+        })
+    </script>
     <table bgcolor="lightgrey" align="center" c cellspacing="40" cellpadding="40">
 
         <caption align="top">
