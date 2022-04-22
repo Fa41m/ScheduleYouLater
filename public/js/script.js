@@ -8,11 +8,15 @@ const calendar = document.getElementById('calendar');
 const newEventModal = document.getElementById('newEventModal');
 const deleteEventModal = document.getElementById('deleteEventModal');
 const RecEventsModal = document.getElementById('reccuringEventsModal');
+const EmEventsModal = document.getElementById('emailEventsModal');
+const email = document.getElementById('userEmail');
+const bodyE = document.getElementById('emailBody');
 const backDrop = document.getElementById('modalBackDrop');
 const eventTitleInput = document.getElementById('eventTitleInput');
 const eventDayRec = document.getElementById('eventDayRec');
 const eventTitleInputRec = document.getElementById('eventTitleInputRec');
 const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday','Sunday'];
+// const mailFunction=require('./email');
 
 function openModal(date) {
   clicked = date;
@@ -107,6 +111,7 @@ function closeModal() {
   newEventModal.style.display = 'none';
   deleteEventModal.style.display = 'none';
   RecEventsModal.style.display = 'none';
+  EmEventsModal.style.display = 'none';
   backDrop.style.display = 'none';
   eventTitleInput.value = '';
   clicked = null;
@@ -135,6 +140,12 @@ function deleteEvent() {
   closeModal();
 }
 
+function openEmail() {
+  deleteEventModal.style.display = 'none';
+  EmEventsModal.style.display = 'block';
+  backDrop.style.display = 'block';
+}
+
 function AddRecEvent() {
   if (eventDayRec.value) {
     if (eventTitleInputRec.value) {
@@ -158,6 +169,39 @@ function AddRecEvent() {
     } else {
       eventDayRec.classList.add('error');
     }
+}
+
+function sendEmail() {
+  if(email.value){
+    console.log(email.value);
+    if(bodyE.value){
+      console.log(bodyE.value);
+      email.classList.remove('error');
+      bodyE.classList.remove('error');
+      // Calling python function in javascript
+      const {spawn} = require('child_process');
+
+      const childPython = spawn('python', ['email-notif.py']);
+      // const childPython = spawn('python', ['email-notif.py', "Meeting today!", "Hey bro you have a meeting today!","Fabrar1738@gmail.com"]);
+      childPython.stdout.on('data', (data) => {
+          console.log(`stdout: ${data}`);
+      });
+      childPython.stderr.on('data', (data) => {
+          console.error(`stderr: ${data}`);
+      });
+      childPython.on('close', (code) => {
+          console.log(`child process exited with code ${code}`);
+      });
+      // mailFunction.emailNotif("Deadline!", "Bing bong!","Fabrar1738@gmail.com")
+      closeModal();
+    }
+    else{
+      bodyE.classList.add('error');
+    }
+  }
+  else{
+    email.classList.add('error');
+  }
 }  
 
 function initButtons() {
@@ -175,8 +219,11 @@ function initButtons() {
   document.getElementById('cancelButton').addEventListener('click', closeModal);
   document.getElementById('deleteButton').addEventListener('click', deleteEvent);
   document.getElementById('closeButton').addEventListener('click', closeModal);
+  document.getElementById('notifyButton').addEventListener('click', openEmail);
   document.getElementById('saveButtonReccuringEvents').addEventListener('click', AddRecEvent);
   document.getElementById('cancelButtonReccuringEvents').addEventListener('click', closeModal);
+  document.getElementById('saveButtonEmail').addEventListener('click', sendEmail);
+  document.getElementById('cancelButtonEmail').addEventListener('click', closeModal);
   document.getElementById('AddReccuringEvents').addEventListener('click', openModalRecEvent);
 }
 

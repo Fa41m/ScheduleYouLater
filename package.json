@@ -1,0 +1,23 @@
+{
+  "name": "scheduleyoulater",
+  "version": "1.0.0",
+  "description": "A scheduling app hosted on a domain server so anyone can access",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fa41m/ScheduleYouLater.git"
+  },
+  "author": "Fahim and Victor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fa41m/ScheduleYouLater/issues"
+  },
+  "homepage": "https://github.com/Fa41m/ScheduleYouLater#readme",
+  "dependencies": {
+    "child_process": "^1.0.2"
+  }
+}
